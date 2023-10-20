@@ -4,13 +4,13 @@ import (
 	"fmt"
 )
 
-func Provide[T any](i *Injector, provider Provider[T]) {
+func Provide[T any](i *Injector, provider Provider[T]) string {
 	name := generateServiceName[T]()
 
-	ProvideNamed[T](i, name, provider)
+	return ProvideNamed[T](i, name, provider)
 }
 
-func ProvideNamed[T any](i *Injector, name string, provider Provider[T]) {
+func ProvideNamed[T any](i *Injector, name string, provider Provider[T]) string {
 	_i := getInjectorOrDefault(i)
 	if _i.exists(name) {
 		panic(fmt.Errorf("DI: service `%s` has already been declared", name))
@@ -20,6 +20,7 @@ func ProvideNamed[T any](i *Injector, name string, provider Provider[T]) {
 	_i.set(name, service)
 
 	_i.logf("service %s injected", name)
+	return name
 }
 
 func ProvideValue[T any](i *Injector, value T) {

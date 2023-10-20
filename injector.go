@@ -86,6 +86,24 @@ func (i *Injector) ListInvokedServices() []string {
 	return names
 }
 
+func (i *Injector) ListOrderedServiceInvocation() []string {
+	i.mu.RLock()
+	defer i.mu.RUnlock()
+	invocations := invertMap(i.orderedInvocation)
+
+	var orderedServices []string
+	for index := 0; index <= i.orderedInvocationIndex; index++ {
+		name, ok := invocations[index]
+		if !ok {
+			continue
+		}
+
+		orderedServices = append(orderedServices, name)
+	}
+
+	return orderedServices
+}
+
 func (i *Injector) HealthCheck() map[string]error {
 	i.mu.RLock()
 	names := keys(i.services)
