@@ -1,4 +1,4 @@
-module github.com/samber/do
+module github.com/clear-street/do
 
 go 1.18
 
